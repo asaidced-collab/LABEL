@@ -10,9 +10,6 @@
         :root {
             --primary-color: #3498db;
             --secondary-color: #2c3e50;
-            --right-color: #c0392b;
-            --left-color: #2980b9;
-            --green-header: #1e7e34;
             --bg-color: #f8f9fa;
             --card-shadow: 0 4px 15px rgba(0,0,0,0.05);
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -40,38 +37,35 @@
 
         #timer-bar {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 50px;
-            background: #2c3e50; color: white;
-            padding: 0 20px; display: flex; align-items: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: #2c3e50;
+            color: white;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
             justify-content: space-between;
-            z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         #progress-container {
             position: fixed;
-            top: 50px; left: 0; width: 100%; height: 5px;
-            background: #e2e8f0; z-index: 1000;
+            top: 50px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #e2e8f0;
+            z-index: 1000;
         }
 
         #progress-bar {
             height: 100%;
-            background: var(--primary-color); width: 0%;
+            background: var(--primary-color);
+            width: 0%;
             transition: width 0.5s ease;
-        }
-
-        .orientation-hint{
-            max-width: 800px;
-            margin: 10px auto 0 auto;
-            background: #fff9db;
-            border: 1px dashed #f1c40f;
-            border-radius: 12px;
-            padding: 12px 16px;
-            color: #7a4b00;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        @media (min-width: 901px) {
-            .orientation-hint{ display:none; }
         }
 
         .container {
@@ -160,11 +154,25 @@
             transition: var(--transition);
         }
 
-        .btn:hover { background: #2980b9; transform: translateY(-2px); }
-        .btn:disabled { background: #95a5a6; cursor: wait; }
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
 
-        .hidden { display: none !important; }
-        .ltr-text { direction: ltr; display: inline-block; unicode-bidi: bidi-override; }
+        .btn:disabled {
+            background: #95a5a6;
+            cursor: wait;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .ltr-text {
+            direction: ltr;
+            display: inline-block;
+            unicode-bidi: bidi-override;
+        }
 
         .input-error {
             border-color: #e74c3c !important;
@@ -172,9 +180,9 @@
         }
 
         @keyframes shake {
-            0%,100%{transform:translateX(0);}
-            25%{transform:translateX(-5px);}
-            75%{transform:translateX(5px);}
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
         .instruction-line {
@@ -192,9 +200,9 @@
             font-weight: bold;
         }
 
-        .welcome-instructions{
-            font-size:1.1em;
-            line-height:1.9;
+        .welcome-instructions {
+            font-size: 1.1em;
+            line-height: 1.9;
         }
 
         .timer-wait-msg {
@@ -228,10 +236,10 @@
             100% { transform: rotate(360deg); }
         }
 
-        .studied-term{
-            color:#c0392b;
-            font-weight:800;
-            font-size:1em;
+        .studied-term {
+            color: #c0392b;
+            font-weight: 800;
+            font-size: 1em;
         }
 
         .container p,
@@ -267,26 +275,28 @@
         }
 
         .sd-likert-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 6px;
+            width: 100%;
         }
 
         .sd-likert-option {
-            flex: 1 0 110px;
-            min-width: 110px;
+            min-width: 0;
+            width: 100%;
             text-align: center;
             background: #f8fafc;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 10px 8px;
+            padding: 10px 4px;
             cursor: pointer;
             transition: var(--transition);
             font-weight: 700;
             color: #2d3748;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 64px;
         }
 
         .sd-likert-option:hover {
@@ -308,9 +318,9 @@
 
         .sd-likert-option .sd-top {
             display: block;
-            font-size: 0.95em;
-            line-height: 1.3;
-            margin-bottom: 4px;
+            font-size: 0.92em;
+            line-height: 1.2;
+            word-break: break-word;
         }
 
         .ref-term-header {
@@ -368,23 +378,54 @@
             font-size: 0.9em;
         }
 
-        @keyframes fadeIn {
-            from { opacity:0; transform:translateY(12px); }
-            to { opacity:1; transform:translateY(0); }
+        .share-request {
+            color: #c00000;
+            font-weight: 800;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-top: 16px;
         }
 
-        @media (max-width: 600px) {
-            .container { padding: 25px 20px; margin: 15px 10px; }
-            .sd-likert-option { flex: 1 0 95px; min-width: 95px; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 25px 16px;
+                margin: 15px 8px;
+            }
+
+            .sd-likert-row {
+                gap: 4px;
+            }
+
+            .sd-likert-option {
+                padding: 8px 2px;
+                min-height: 58px;
+                border-radius: 10px;
+            }
+
+            .sd-likert-option .sd-top {
+                font-size: 0.78em;
+                line-height: 1.15;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .sd-likert-option .sd-top {
+                font-size: 0.72em;
+            }
+
+            .sd-likert-option {
+                min-height: 54px;
+                padding: 7px 1px;
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="orientation-hint" role="note" aria-label="تنبيه العرض على الهاتف">
-        <h3 style="margin:0 0 6px 0;">تنبيه صغير</h3>
-        <p style="margin:0;">يمكن تعبئة الاستمارة بشكل عادي على الهاتف دون الحاجة إلى قلب الشاشة.</p>
-    </div>
 
     <div id="timer-bar">
         <span id="global-timer" style="font-family:monospace; direction:ltr;">00:00</span>
@@ -447,7 +488,9 @@
   function fisherYatesShuffle(arr) {
     for (var i = arr.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
-      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+      var tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
     }
     return arr;
   }
@@ -499,7 +542,7 @@
     },
     {
       id: 3,
-      main: '3. توجد طرق وتدخلات مختلفة يمكن أن تساعد هذا الشخص. في رأيك، ما أهم تدخل يمكن أن يساعده  في تحسين حياته؟',
+      main: '3. توجد طرق وتدخلات مختلفة يمكن أن تساعد هذا الشخص. في رأيك، ما أهم تدخل يمكن أن يساعد هذا الشخص في تحسين حياته؟',
       sub: 'اذكر تدخلاً واحداً فقط تراه الأكثر فائدة.'
     }
   ];
@@ -546,6 +589,7 @@
       var all = container.querySelectorAll('.radio-card-label');
       for (var i = 0; i < all.length; i++) removeClass(all[i], 'checked');
     }
+
     addClass(label, 'checked');
 
     var radio = label.querySelector('input[type="radio"]');
@@ -574,6 +618,7 @@
     }
 
     addClass(label, 'checked');
+
     var radio = label.querySelector('input[type="radio"]');
     if (radio) radio.checked = true;
 
@@ -659,8 +704,14 @@
     },
     validate: function () {
       var consent = document.querySelector('input[name="consent"]:checked');
-      if (!consent) { highlightError('blk_agree'); return false; }
-      if (consent.value === 'لا') { alert('لا يمكن الاستمرار دون موافقة.'); return false; }
+      if (!consent) {
+        highlightError('blk_agree');
+        return false;
+      }
+      if (consent.value === 'لا') {
+        alert('لا يمكن الاستمرار دون موافقة.');
+        return false;
+      }
       return true;
     }
   };
@@ -709,7 +760,7 @@
       if (!checkRadio('edu', 'blk_edu')) valid = false;
 
       var maj = document.querySelector('input[name="major"]');
-      if (!maj || maj.value.replace(/^\s+|\s+$/g,'').length < 2) {
+      if (!maj || maj.value.replace(/^\s+|\s+$/g, '').length < 2) {
         if (maj) addClass(maj, 'input-error');
         valid = false;
       } else {
@@ -724,12 +775,12 @@
   pages.social_distance = {
     render: function () {
       var roles = [
-        "أقبل أن يكون : زوجاً/زوجة",
-        "أقبل أن يكون :صهراً (زوج/ة لأحد الأقارب)",
-        "أقبل أن يكون :جار(ة) في السكن",
-        "أقبل أن يكون :صديقاً (ة) مقرباً (ة)",
-        "أقبل أن يكون :زميلاً (ة) في الدراسة",
-        "أقبل أن :تقتصر علاقتي به/بها على الحد الأدنى فقط"
+        "أقبل أن يكون: زوجاً/زوجة",
+        "أقبل أن يكون: صهراً (زوج/ة لأحد الأقارب)",
+        "أقبل أن يكون: جار(ة) في السكن",
+        "أقبل أن يكون: صديقاً (ة) مقرباً (ة)",
+        "أقبل أن يكون: زميلاً (ة) في الدراسة",
+        "أقبل أن تقتصر علاقتي به/بها على الحد الأدنى فقط"
       ];
 
       var items = '';
@@ -756,9 +807,7 @@
           '<p style="margin:0;">عبِّر عن رأيك الشخصي في كل علاقة على حدة.</p>' +
         '</div>' +
         '<div id="sd_timer" class="timer-wait-msg">المرجو الانتظار... <span id="sd_count">5</span></div>' +
-        '<div id="sd_content" class="hidden">' +
-          items +
-        '</div>';
+        '<div id="sd_content" class="hidden">' + items + '</div>';
     },
     validate: function () {
       var sdContent = document.getElementById('sd_content');
@@ -787,17 +836,19 @@
         '<div id="ref_q_container"></div>' +
         '<button id="ref_next_btn" class="btn" onclick="nextRefQuestion()">التالي</button>';
     },
-    validate: function () { return false; }
+    validate: function () {
+      return false;
+    }
   };
 
   pages.familiarity = {
     render: function () {
-      var freq = ['نادرًا جدًا','نادرًا','أحيانًا','كثيرا','كثيرا جداً'];
-      var clear = ['غامض جداً','غامض','واضح نوعاً ما','واضح','واضح جداً'];
+      var freq = ['نادرًا جدًا', 'نادرًا', 'أحيانًا', 'كثيرا', 'كثيرا جداً'];
+      var clear = ['غامض جداً', 'غامض', 'واضح نوعاً ما', 'واضح', 'واضح جداً'];
       var i, cards1 = '', cards2 = '';
 
-      for (i = 0; i < freq.length; i++) cards1 += createRadioCard('fam_freq', String(i+1), freq[i]);
-      for (i = 0; i < clear.length; i++) cards2 += createRadioCard('fam_clear', String(i+1), clear[i]);
+      for (i = 0; i < freq.length; i++) cards1 += createRadioCard('fam_freq', String(i + 1), freq[i]);
+      for (i = 0; i < clear.length; i++) cards2 += createRadioCard('fam_clear', String(i + 1), clear[i]);
 
       return '' +
         '<h2>معلومات إضافية</h2>' +
@@ -811,7 +862,7 @@
         '</div>';
     },
     validate: function () {
-      if (!checkRadio('fam_freq','blk_fam1') || !checkRadio('fam_clear','blk_fam2')) {
+      if (!checkRadio('fam_freq', 'blk_fam1') || !checkRadio('fam_clear', 'blk_fam2')) {
         alert('يرجى الإجابة');
         return false;
       }
@@ -821,9 +872,9 @@
 
   pages.final_demo = {
     render: function () {
-      var know = ['لا أملك تقريباً أي معرفة','معرفة بسيطة','معرفة متوسطة','معرفة جيدة','معرفة ممتازة'];
+      var know = ['لا أملك تقريباً أي معرفة', 'معرفة بسيطة', 'معرفة متوسطة', 'معرفة جيدة', 'معرفة ممتازة'];
       var i, cards = '';
-      for (i = 0; i < know.length; i++) cards += createRadioCard('know', String(i+1), know[i]);
+      for (i = 0; i < know.length; i++) cards += createRadioCard('know', String(i + 1), know[i]);
 
       return '' +
         '<h2>أسئلة ختامية</h2>' +
@@ -831,7 +882,6 @@
           '<p class="q-label">1. كيف تقيّم مستوى معرفتك العام بقضايا الإعاقة الذهنية؟</p>' +
           '<div class="options-grid" style="grid-template-columns: 1fr;">' + cards + '</div>' +
         '</div>' +
-
         '<div class="question-block" id="blk_contact">' +
           '<p class="q-label">2. هل سبق لك أن كانت لك علاقة مباشرة بشخص لديه إعاقة ذهنية؟</p>' +
           '<div class="options-grid" style="grid-template-columns: 1fr;">' +
@@ -841,7 +891,6 @@
             createRadioCard('contact', 'نعم، علاقة قرابة من الدرجة الأولى (أخ، ابن، والد...).', 'نعم، علاقة قرابة من الدرجة الأولى (أخ، ابن، والد...).') +
           '</div>' +
         '</div>' +
-
         '<div class="question-block" id="blk_att" style="opacity:0.8; transform:scale(0.95); background:#fffbf0; border:1px dashed orange;">' +
           '<p class="q-label" style="color:#d35400;">3. للتحقق من الانتباه، يرجى اختيار الخيار “99” في هذا السؤال:</p>' +
           '<div class="options-grid">' +
@@ -851,7 +900,7 @@
         '</div>';
     },
     validate: function () {
-      if (!checkRadio('know','blk_know') || !checkRadio('contact','blk_contact') || !checkRadio('att_chk','blk_att')) {
+      if (!checkRadio('know', 'blk_know') || !checkRadio('contact', 'blk_contact') || !checkRadio('att_chk', 'blk_att')) {
         alert("يرجى الإجابة على الكل.");
         return false;
       }
@@ -865,10 +914,13 @@
         '<div style="text-align:center; padding:50px 0;">' +
           '<div style="font-size:70px; color:#27ae60; margin-bottom:20px;">✓</div>' +
           '<h2 style="border:none; color:#27ae60;">تم الإرسال بنجاح</h2>' +
-          '<p style="font-size:1.2em;">شكراً جزيلاً لمساهمتكم القيمة في هذا البحث العلمي. وسنكون شاكرين لكم لو تكرمتم بتقاسم رابط هذه الاستمارة مع طلبة آخرين من معارفكم</p>' +
+          '<p style="font-size:1.2em;">شكراً جزيلاً لمساهمتكم القيمة في هذا البحث العلمي.</p>' +
+          '<p class="share-request">وسنكون شاكرين لكم لو تكرمتم بتقاسم رابط هذه الاستمارة مع طلبة آخرين من معارفكم</p>' +
         '</div>';
     },
-    validate: function () { return true; }
+    validate: function () {
+      return true;
+    }
   };
 
   function renderRefQuestionDynamic() {
@@ -967,10 +1019,14 @@
       var v = responses.data['mds_' + i];
       if (v) sdVals.push(v);
     }
+
     if (sdVals.length === 6) {
       var same = true;
       for (var j = 1; j < sdVals.length; j++) {
-        if (sdVals[j] !== sdVals[0]) { same = false; break; }
+        if (sdVals[j] !== sdVals[0]) {
+          same = false;
+          break;
+        }
       }
       if (same) qScore -= 20;
     }
