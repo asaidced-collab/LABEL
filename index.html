@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>استمارة البحث </title>
+    <title>استمارة البحث</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
-        /* --- المتغيرات والتنسيقات الأساسية --- */
         :root {
             --primary-color: #3498db;
             --secondary-color: #2c3e50;
@@ -36,10 +35,9 @@
             line-height: 1.6;
             color: #4a5568;
             font-size: 16px;
-            scroll-behavior: smooth; /* تفعيل التمرير الناعم */
+            scroll-behavior: smooth;
         }
 
-        /* --- شريط الأدوات العلوي --- */
         #timer-bar {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 50px;
@@ -48,20 +46,19 @@
             justify-content: space-between;
             z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+
         #progress-container {
             position: fixed;
             top: 50px; left: 0; width: 100%; height: 5px;
             background: #e2e8f0; z-index: 1000;
         }
+
         #progress-bar {
             height: 100%;
             background: var(--primary-color); width: 0%;
             transition: width 0.5s ease;
         }
 
-        
-
-        /* --- تنبيه تدوير الهاتف --- */
         .orientation-hint{
             max-width: 800px;
             margin: 10px auto 0 auto;
@@ -72,268 +69,336 @@
             color: #7a4b00;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
+
         @media (min-width: 901px) {
             .orientation-hint{ display:none; }
         }
-.container {
-            max-width: 800px;
-            margin: 30px auto;
-            background: white; padding: 30px; /* تقليل الهامش قليلاً للموبايل */
-            border-radius: 20px; box-shadow: var(--card-shadow);
-            min-height: 60vh;
-            animation: fadeIn 0.5s ease-out;
+
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: var(--card-shadow);
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* تأثير النبض عند الاختيار */
-        @keyframes pulse-animation {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        h2 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eef2f7;
+            padding-bottom: 12px;
         }
 
-        h2 { color: var(--secondary-color); margin-bottom: 25px; border-bottom: 3px solid #f1f1f1; padding-bottom: 10px; display: inline-block; }
+        .question-block {
+            background: #fff;
+            border: 1px solid #e8edf3;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: var(--transition);
+        }
 
-        /* --- تنسيقات بطاقات الاختيار --- */
-        .question-block { margin-bottom: 30px; scroll-margin-top: 100px; /* لضبط التمرير */ }
-        .q-label { font-weight: 700; margin-bottom: 15px; display: block; font-size: 1.1em; color: #2d3748; }
-        
+        .q-label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 14px;
+            line-height: 1.9;
+        }
+
         .options-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .options-grid > * { flex: 1 1 140px; }
-
-        @supports (display: grid) {
-            .options-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-                gap: 15px;
-            }
-            .options-grid > * { flex: initial; }
+            display: grid;
+            gap: 12px;
+            grid-template-columns: 1fr;
         }
 
         .radio-card-label {
-            position: relative;
-            background: #fff;
+            display: block;
+            background: #f8fafc;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 15px 10px;
-            text-align: center;
+            padding: 14px 16px;
             cursor: pointer;
             transition: var(--transition);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 500; color: #4a5568;
-        }
-
-        .radio-card-label input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-        .radio-card-label:hover { border-color: #cbd5e0; background: #f7fafc; transform: translateY(-2px); }
-        
-        /* حالة الاختيار مع تأثير النبض */
-        .radio-card-label.checked {
-            border-color: var(--primary-color); 
-            background-color: #ebf8ff;
-            color: var(--primary-color); font-weight: 700;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
-            animation: pulse-animation 0.3s ease-in-out;
-        }
-
-        /* --- تنسيقات قسم المرجعية --- */
-        .ref-header { 
-            text-align: center; margin-bottom: 15px; font-weight: 800; 
-            color: var(--green-header); font-size: 1.6em; 
-            padding: 10px; border-bottom: 2px solid #eee;
-        }
-        .ref-intro-q { text-align: center; margin-bottom: 30px; font-size: 1.1em; color: #444; line-height: 1.8; font-weight: 500; }
-        
-        .ref-split-container {
-            display: flex; gap: 15px; justify-content: center; align-items: stretch; margin-bottom: 30px;
-            position: relative;
-        }
-        
-        .neutral-wrapper {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10;
-        }
-        .neutral-btn {
-            background: linear-gradient(90deg, var(--left-color) 0 50%, var(--right-color) 50% 100%);
-            border: 2px solid #95a5a6; color: white;
-            width: 65px; height: 65px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 0.9em; cursor: pointer;
-            transition: var(--transition); text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .neutral-btn:hover { filter: brightness(1.05); transform: scale(1.1); }
-        .neutral-btn.selected {
-            background: linear-gradient(90deg, var(--left-color) 0 50%, var(--right-color) 50% 100%);
-            color: white; border-color: #34495e;
-            transform: scale(1.1);
-            box-shadow: 0 0 0 3px rgba(52,73,94,0.25), 0 0 15px rgba(0,0,0,0.2);
-        }
-
-        .choice-card {
-            flex: 1; padding: 25px 15px; border-radius: 15px;
-            border: 3px solid transparent; background: #f8f9fa;
-            text-align: center; cursor: pointer; transition: var(--transition);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1em; font-weight: 700; min-height: 130px;
-        }
-
-        .choice-card.right-card { border-color: #fadbd8; color: #c0392b; background: #fff5f5; }
-        .choice-card.right-card.selected { background: #c0392b; color: white; border-color: #c0392b; box-shadow: 0 5px 15px rgba(192, 57, 43, 0.4); transform: scale(1.05); }
-
-        .choice-card.left-card { border-color: #d6eaf8; color: #2980b9; background: #ebf5fb; }
-        .choice-card.left-card.selected { background: #2980b9; color: white; border-color: #2980b9; box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4); transform: scale(1.05); }
-
-        .choice-card.dimmed { opacity: 0.3; transform: scale(0.95); }
-
-        .intensity-section { text-align: center; margin-top: 30px; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-        
-        .neutral-explain{
-            margin-top: 12px;
-            padding: 10px 12px;
-            border-radius: 10px;
-            background: rgba(0,0,0,0.04);
             font-weight: 600;
-            color: #2c3e50;
+            color: #2d3748;
             text-align: center;
         }
-        .neutral-explain.hidden{ display:none; }
 
-        .intensity-buttons { display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-direction: row-reverse; }
-        .int-btn {
-            width: auto; min-width: 90px; padding: 10px 15px; height: auto;
-            border-radius: 12px; border: 2px solid #e2e8f0; background: white;
-            font-size: 1em; font-weight: bold; color: #718096;
-            cursor: pointer; transition: var(--transition);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .int-btn:hover { background: #edf2f7; transform: translateY(-3px); }
-        .int-btn.active { color: white; border-color: transparent; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .int-btn.active:nth-child(1) { background-color: #27ae60; }
-        .int-btn.active:nth-child(2) { background-color: #f39c12; }
-        .int-btn.active:nth-child(3) { background-color: #e67e22; }
-
-        .ref-feedback {
-            margin-top: 25px; padding: 15px; border-radius: 8px; background: #f0fff4; border: 1px solid #c6f6d5;
-            color: #276749; text-align: center; font-weight: bold; display: none;
+        .radio-card-label:hover {
+            background: #edf6ff;
+            border-color: #90cdf4;
+            transform: translateY(-2px);
         }
 
-        .table-scroll-wrapper { overflow-x: auto; margin-bottom: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        table { width: 100%; min-width: 650px; border-collapse: collapse; background: white; }
-        th, td { padding: 15px; text-align: center; border-bottom: 1px solid #edf2f7; }
-        th { background: #f8fafc; color: #4a5568; font-size: var(--form-text-size); }
-        td:first-child { text-align: right; width: 35%; font-weight: 600; background: #fff; position: sticky; right: 0; border-left: 2px solid #e2e8f0; }
-        
-        td.clickable-cell { cursor: pointer; transition: background 0.2s; }
-        td.clickable-cell:hover { background-color: #f7fafc; }
-        td.clickable-cell:active { background-color: #ebf8ff; }
-        
-        .table-radio { width: 24px; height: 24px; cursor: pointer; accent-color: var(--primary-color); pointer-events: none; }
-        
+        .radio-card-label.checked {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            box-shadow: 0 4px 10px rgba(52,152,219,0.25);
+        }
+
+        .radio-card-label input {
+            display: none;
+        }
+
         .btn {
-            width: 100%; padding: 16px; border: none; border-radius: 10px;
-            background: var(--primary-color); color: white; font-size: 1.1em; font-weight: bold;
-            cursor: pointer; margin-top: 30px; box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
             transition: var(--transition);
         }
+
         .btn:hover { background: #2980b9; transform: translateY(-2px); }
         .btn:disabled { background: #95a5a6; cursor: wait; }
 
         .hidden { display: none !important; }
         .ltr-text { direction: ltr; display: inline-block; unicode-bidi: bidi-override; }
-        .input-error { border-color: #e74c3c !important; animation: shake 0.4s; }
-        @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
 
-        .instruction-line { display: block; margin-bottom: 10px; position: relative; padding-right: 15px; }
-        .instruction-line::before { content: "•"; position: absolute; right: 0; color: var(--primary-color); font-weight: bold; }
+        .input-error {
+            border-color: #e74c3c !important;
+            animation: shake 0.4s;
+        }
 
+        @keyframes shake {
+            0%,100%{transform:translateX(0);}
+            25%{transform:translateX(-5px);}
+            75%{transform:translateX(5px);}
+        }
 
-        /* إبراز "اللفظ المدروس" */
+        .instruction-line {
+            display: block;
+            margin-bottom: 10px;
+            position: relative;
+            padding-right: 15px;
+        }
+
+        .instruction-line::before {
+            content: "•";
+            position: absolute;
+            right: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .welcome-instructions{
+            font-size:1.1em;
+            line-height:1.9;
+        }
+
+        .timer-wait-msg {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            background: #fff9db;
+            border-radius: 10px;
+            border: 2px dashed #f1c40f;
+            color: #d35400;
+            font-weight: bold;
+        }
+
+        #loading-overlay {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .studied-term{
             color:#c0392b;
             font-weight:800;
             font-size:1em;
         }
 
-        /* تعليمات المسافة الاجتماعية */
-        .sd-question-line{
-            color:#000;
-            font-weight:700;
-            margin:10px 0;
-            text-align:center;
-        }
-
-        
-        /* توحيد حجم خط التعليمات وعوارض الترحيب والأسئلة (بنفس حجم "إلى أي حدّ...") */
         .container p,
         .container li,
         .container label,
         .container th,
-        .container td {
+        .container td,
+        .container input,
+        .container textarea {
             font-size: var(--form-text-size) !important;
         }
-        .container th { font-size: var(--form-text-size) !important; }
-        .container td:first-child { font-size: var(--form-text-size) !important; }
 
-/* صفحة الترحيب */
-        .welcome-instructions{
-            font-size:1.1em;
-            line-height:1.9;
+        .sd-item {
+            background: #fff;
+            border: 1px solid #e8edf3;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            transition: var(--transition);
         }
-        
-        .timer-wait-msg {
-            text-align: center; padding: 40px; font-size: 1.2em;
-            background: #fff9db; border-radius: 10px; border: 2px dashed #f1c40f;
-            color: #d35400; font-weight: bold;
+
+        .sd-item.input-error {
+            background: #fff5f5;
+            border-color: #e74c3c !important;
         }
-        
-        /* رسالة التحميل */
-        #loading-overlay {
-            text-align: center; padding: 50px;
+
+        .sd-role {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 14px;
+            line-height: 1.8;
+            text-align: center;
         }
-        .spinner {
-            border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-color);
-            border-radius: 50%; width: 50px; height: 50px;
-            animation: spin 1s linear infinite; margin: 0 auto 20px auto;
+
+        .sd-likert-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            justify-content: center;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .sd-likert-option {
+            flex: 1 0 110px;
+            min-width: 110px;
+            text-align: center;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .sd-likert-option:hover {
+            background: #edf6ff;
+            border-color: #90cdf4;
+            transform: translateY(-2px);
+        }
+
+        .sd-likert-option.checked {
+            background: #3498db;
+            color: #fff;
+            border-color: #3498db;
+            box-shadow: 0 4px 10px rgba(52,152,219,0.22);
+        }
+
+        .sd-likert-option input {
+            display: none;
+        }
+
+        .sd-likert-option .sd-top {
+            display: block;
+            font-size: 0.95em;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+
+        .ref-term-header {
+            text-align: center;
+            color: #b30000;
+            font-weight: 800;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        .ref-short-wrap {
+            animation: fadeIn 0.4s ease;
+        }
+
+        .ref-short-q {
+            background: #ffffff;
+            border: 1px solid #e8edf3;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .ref-short-q .main-q {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.9;
+        }
+
+        .ref-short-q .sub-q {
+            color: #6b7280;
+            margin-bottom: 12px;
+            line-height: 1.8;
+            font-size: 0.98em;
+        }
+
+        .ref-short-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: #fff;
+            transition: var(--transition);
+        }
+
+        .ref-short-input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52,152,219,0.12);
+        }
+
+        .char-note {
+            display: block;
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity:0; transform:translateY(12px); }
+            to { opacity:1; transform:translateY(0); }
+        }
 
         @media (max-width: 600px) {
             .container { padding: 25px 20px; margin: 15px 10px; }
-            .ref-split-container { flex-direction: column; gap: 20px; }
-            .neutral-wrapper { order: 2; margin: -10px 0; }
-            .choice-card { min-height: 100px; order: 1; }
-            .choice-card.left-card { order: 3; }
-            td:first-child { width: 40%; font-size: var(--form-text-size); }
+            .sd-likert-option { flex: 1 0 95px; min-width: 95px; }
         }
     </style>
 </head>
 <body>
 
     <div class="orientation-hint" role="note" aria-label="تنبيه العرض على الهاتف">
-        <h3 style="margin:0 0 6px 0;">يرجى تدوير الهاتف</h3>
-        <p style="margin:0;">لأفضل عرض (خصوصًا للجداول)، يُفضّل استخدام الوضع العرضي (Landscape).</p>
+        <h3 style="margin:0 0 6px 0;">تنبيه صغير</h3>
+        <p style="margin:0;">يمكن تعبئة الاستمارة بشكل عادي على الهاتف دون الحاجة إلى قلب الشاشة.</p>
     </div>
 
-<div id="timer-bar">
-    <span id="global-timer" style="font-family:monospace; direction:ltr;">00:00</span>
-    <span>بحث علمي</span>
-</div>
+    <div id="timer-bar">
+        <span id="global-timer" style="font-family:monospace; direction:ltr;">00:00</span>
+        <span>بحث علمي</span>
+    </div>
 
-<div id="progress-container"><div id="progress-bar"></div></div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
 
-<div class="container" id="main-container"><div class="timer-wait-msg">جار تحميل الاستمارة...</div><noscript><div class="timer-wait-msg">هذه الاستمارة تحتاج تفعيل JavaScript في المتصفح.</div></noscript></div>
-
+    <div class="container" id="main-container">
+        <div class="timer-wait-msg">جار تحميل الاستمارة...</div>
+        <noscript><div class="timer-wait-msg">هذه الاستمارة تحتاج تفعيل JavaScript في المتصفح.</div></noscript>
+    </div>
 
 <script>
-/*
-  استمارة متوافقة مع أغلب المتصفحات/الهواتف (ES5).
-  ملاحظة: تم تجنّب template literals/arrow functions/fetch-only لضمان عملها في متصفحات أقدم.
-*/
 (function () {
   'use strict';
 
@@ -346,10 +411,12 @@
     if (!el || !el.className) return false;
     return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') !== -1;
   }
+
   function addClass(el, cls) {
     if (!el) return;
     if (!hasClass(el, cls)) el.className = (el.className ? el.className + ' ' : '') + cls;
   }
+
   function removeClass(el, cls) {
     if (!el || !el.className) return;
     var re = new RegExp('(^|\\s)' + cls + '(\\s|$)', 'g');
@@ -362,6 +429,7 @@
     if (!f) return false;
     return f.call(el, selector);
   }
+
   function closest(el, selector) {
     while (el && el.nodeType === 1) {
       if (matches(el, selector)) return el;
@@ -372,7 +440,7 @@
 
   function safeScrollIntoView(el) {
     if (!el) return;
-    try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     catch (e) { try { el.scrollIntoView(true); } catch (e2) {} }
   }
 
@@ -386,85 +454,74 @@
 
   var labelOptions = [
     {
-      id: 1, text: "الشخص ذو الإعاقة الذهنية",
-      sd_intro: 'تحديد درجة موافقتك على إمكانية إقامة كل من هذه العلاقات مع <span style="color:#c0392b; font-weight:800; font-size:1.1em;">شخصٍ ذي إعاقة ذهنية</span>:',
+      id: 1,
+      text: "الشخص ذو الإعاقة الذهنية",
+      sd_intro: 'مع شخصٍ ذي إعاقة ذهنية',
       fam_q: '<span class="studied-term">"شخص ذو إعاقة ذهنية"</span>: إلى أي حد تصادف هذا اللفظ (سماعا أو قراءة) في حياتك اليومية؟',
       clear_q: 'ما مدى وضوح هذا اللفظ: <span class="studied-term">"شخص ذو إعاقة ذهنية"</span> بالنسبة إليك؟'
     },
     {
-      id: 2, text: "الشخص المعاق ذهنياً",
-      sd_intro: 'تحديد درجة موافقتك على إمكانية إقامة كل من هذه العلاقات مع <span style="color:#c0392b; font-weight:800; font-size:1.1em;">شخصٍ معاقٍ ذهنياً</span>:',
+      id: 2,
+      text: "الشخص المعاق ذهنياً",
+      sd_intro: 'مع شخصٍ معاقٍ ذهنياً',
       fam_q: '<span class="studied-term">"شخص معاق ذهنيا"</span>: إلى أي حد تصادف هذا اللفظ (سماعا أو قراءة) في حياتك اليومية؟',
       clear_q: 'ما مدى وضوح هذا اللفظ: <span class="studied-term">"شخص معاق ذهنياً"</span> بالنسبة إليك؟'
     },
     {
-      id: 3, text: "الشخص في وضعية إعاقة ذهنية",
-      sd_intro: 'تحديد درجة موافقتك على إمكانية إقامة كل من هذه العلاقات مع <span style="color:#c0392b; font-weight:800; font-size:1.1em;">شخصٍ في وضعية إعاقة ذهنية</span>:',
+      id: 3,
+      text: "الشخص في وضعية إعاقة ذهنية",
+      sd_intro: 'مع شخصٍ في وضعية إعاقة ذهنية',
       fam_q: '<span class="studied-term">"شخص في وضعية إعاقة ذهنية"</span>: إلى أي حد تصادف هذا اللفظ (سماعا أو قراءة) في حياتك اليومية؟',
       clear_q: 'ما مدى وضوح هذا اللفظ: <span class="studied-term">"شخص في وضعية إعاقة ذهنية"</span> بالنسبة إليك؟'
     },
     {
-      id: 4, text: "الشخص المتأخر ذهنياً",
-      sd_intro: 'تحديد درجة موافقتك على إمكانية إقامة كل من هذه العلاقات مع <span style="color:#c0392b; font-weight:800; font-size:1.1em;">شخصٍ متأخرٍ ذهنياً</span>:',
+      id: 4,
+      text: "الشخص المتأخر ذهنياً",
+      sd_intro: 'مع شخصٍ متأخرٍ ذهنياً',
       fam_q: '<span class="studied-term">"شخص متأخر ذهنيا"</span>: إلى أي حد تصادف هذا اللفظ (سماعا أو قراءة) في حياتك اليومية؟',
       clear_q: 'ما مدى وضوح هذا اللفظ: <span class="studied-term">"شخص متأخر ذهنياً"</span> بالنسبة إليك؟'
     }
   ];
 
   var selectedLabel = labelOptions[Math.floor(Math.random() * labelOptions.length)];
-var orderGroup = 1; // SD-First دائماً
-  var rawRefQuestions = [
+  var orderGroup = 1;
+
+  var refShortQuestions = [
     {
       id: 1,
-      right: "السبب الأساسي ينبع من داخل الشخص (مثل: المرض، الخلل الوظيفي، ضعف الإدراك).",
-      left: "السبب الأساسي ينبع من عوامل خارجية (مثل: نظرة المجتمع، المعيقات المادية، القوانين).",
-      intro: "برأيك، ما هو السبب الأساسي للصعوبات التي تعترض طريق هذا الشخص في حياته اليومية؟<br><small>(اقرأ الإجابتين معا، ثم اختر أكثرها موافقة لرأيك الشخصي)</small>"
+      main: '1. يواجه هذا الشخص صعوبات كثيرة في حياته اليومية. في رأيك، ما هو السبب الأهم لهذه الصعوبات؟',
+      sub: 'اذكر سبباً واحداً فقط هو الأهم في نظرك.'
     },
     {
       id: 2,
-      right: "تأهيل الشخص ليتكيف مع متطلبات الدراسة والعمل.",
-      left: "تعديل بيئة الدراسة والعمل لتتلاءم مع حاجات الشخص.",
-      intro: "توجد إجراءات كثيرة لتحسين حياته، لكن هل ينبغي إعطاء الأولوية لـ<br><small>(اقرأ الإجابتين معا، ثم اختر أكثرها موافقة لرأيك الشخصي)</small>"
+      main: '2. أحياناً، لا ينجح دمج هذا الشخص في الدراسة أو العمل. في رأيك، ما العامل أو السبب الأهم المسؤول عن هذا التعثر؟',
+      sub: 'اذكر عاملاً واحداً فقط هو الأهم من وجهة نظرك.'
     },
     {
       id: 3,
-      right: " أثر ثابت ودائم، ويبقى ملازماً للشخص مهما تغيرت الظروف.",
-      left: "اثر متغير وظرفي، وقد يختفي أو يقل تماماً إذا توفرت البيئة المناسبة.",
-      intro: "تترك الإعاقة أثرا في حياة هذا الشخص، فكيف تنظر إلى طبيعة هذا الأثر؟<br><small>(اقرأ الإجابتين معا، ثم اختر أكثرها موافقة لرأيك الشخصي)</small>"
-    },
-    {
-      id: 4,
-      right: "المرجع الأساسي هو تشخيص الخبراء ونتائج الاختبارات والمقاييس الطبية.",
-      left: "المرجع الأساسي هو المعرفة النابعة من تجربة الشخص وأسرته وملاحظاتهم الواقعية.",
-      intro: "عند التخطيط لتحديد احتياجات هذا الشخص، ما المرجع الأول الذي ينبغي الرجوع إليه؟<br><small>(اقرأ الإجابتين معا، ثم اختر أكثرها موافقة لرأيك الشخصي)</small>"
-    },
-    {
-      id: 5,
-      right: "المسؤول الأول هو محدودية قدراته الذهنية التي تمنعه من المواكبة.",
-      left: "المسؤول الأول هو غياب التكييفات والترتيبات اللازمة له في بيئة العمل/الدراسة.",
-      intro: "تتدخل عدة عوامل في تعثر الدمج الاجتماعي والتعليمي... لهذا الشخص، لكن في نظرك من المسؤول الأول عن ذلك ؟<br><small>(اقرأ الإجابتين معا، ثم اختر أكثرها موافقة لرأيك الشخصي)</small>"
+      main: '3. توجد طرق وتدخلات مختلفة يمكن أن تساعد هذا الشخص. في رأيك، ما أهم تدخل يمكن أن يساعده  في تحسين حياته؟',
+      sub: 'اذكر تدخلاً واحداً فقط تراه الأكثر فائدة.'
     }
   ];
 
-  var randomizedRefQuestions = fisherYatesShuffle(rawRefQuestions.slice());
+  var randomizedRefQuestions = fisherYatesShuffle(refShortQuestions.slice());
 
   var responses = {
     labelId: selectedLabel.id,
     orderGroup: (orderGroup === 0 ? "Ref-First" : "SD-First"),
     startTime: now(),
-    data: {},
+    data: {
+      ref_4: '',
+      ref_5: '',
+      time_ref_4: '',
+      time_ref_5: ''
+    },
     timings: {}
   };
 
   var currentPageIndex = 0;
   var pageSequence = [];
   var refQIndex = 0;
-  var currentRefState = { side: null, intensity: null };
-
-  function setText(id, txt) {
-    var el = document.getElementById(id);
-    if (el) el.innerText = txt;
-  }
 
   function createRadioCard(name, value, labelText, extraClass) {
     extraClass = extraClass || "";
@@ -472,6 +529,14 @@ var orderGroup = 1; // SD-First دائماً
       '<label class="radio-card-label ' + extraClass + '" onclick="selectCard(this)">' +
         '<input type="radio" name="' + name + '" value="' + value + '">' +
         '<span>' + labelText + '</span>' +
+      '</label>';
+  }
+
+  function createSDLikert(name, value, labelText) {
+    return '' +
+      '<label class="sd-likert-option" onclick="selectSDLikert(this)">' +
+        '<input type="radio" name="' + name + '" value="' + value + '">' +
+        '<span class="sd-top">' + labelText + '</span>' +
       '</label>';
   }
 
@@ -500,13 +565,32 @@ var orderGroup = 1; // SD-First دائماً
     }, 300);
   };
 
-  window.selectTableCell = function (td) {
-    var radio = td.querySelector('input[type="radio"]');
-    if (radio) {
-      radio.checked = true;
-      var tr = td.parentElement;
-      if (tr) tr.style.background = "transparent";
+  window.selectSDLikert = function (label) {
+    var container = closest(label, '.sd-item');
+    if (container) {
+      var all = container.querySelectorAll('.sd-likert-option');
+      for (var i = 0; i < all.length; i++) removeClass(all[i], 'checked');
+      removeClass(container, 'input-error');
     }
+
+    addClass(label, 'checked');
+    var radio = label.querySelector('input[type="radio"]');
+    if (radio) radio.checked = true;
+
+    setTimeout(function () {
+      if (!container) return;
+      var nextItem = container.nextElementSibling;
+      while (nextItem && !hasClass(nextItem, 'sd-item')) {
+        nextItem = nextItem.nextElementSibling;
+      }
+
+      if (nextItem) {
+        safeScrollIntoView(nextItem);
+      } else {
+        var nextBtn = document.querySelector('.btn');
+        if (nextBtn) safeScrollIntoView(nextBtn);
+      }
+    }, 250);
   };
 
   function checkRadio(name, blkId) {
@@ -527,17 +611,21 @@ var orderGroup = 1; // SD-First دائماً
 
   function saveData() {
     var checked = document.querySelectorAll('input:checked');
-    for (var i = 0; i < checked.length; i++) responses.data[checked[i].name] = checked[i].value;
+    for (var i = 0; i < checked.length; i++) {
+      responses.data[checked[i].name] = checked[i].value;
+    }
 
     var texts = document.querySelectorAll('input[type="text"]');
-    for (var j = 0; j < texts.length; j++) responses.data[texts[j].name] = texts[j].value;
+    for (var j = 0; j < texts.length; j++) {
+      responses.data[texts[j].name] = texts[j].value;
+    }
   }
 
   function determinePageOrder() {
     if (orderGroup === 0) {
-      pageSequence = ['welcome', 'demographics', 'ref_intro', 'ref_questions', 'buffer', 'social_distance', 'familiarity', 'final_demo', 'end'];
+      pageSequence = ['welcome', 'demographics', 'ref_questions', 'social_distance', 'familiarity', 'final_demo', 'end'];
     } else {
-      pageSequence = ['welcome', 'demographics', 'social_distance', 'buffer', 'ref_intro', 'ref_questions', 'familiarity', 'final_demo', 'end'];
+      pageSequence = ['welcome', 'demographics', 'social_distance', 'ref_questions', 'familiarity', 'final_demo', 'end'];
     }
   }
 
@@ -551,7 +639,7 @@ var orderGroup = 1; // SD-First دائماً
         '</div>' +
         '<div class="welcome-instructions" style="background:#eef6fc; padding:25px; border-radius:10px; margin-bottom:20px; border-right:5px solid var(--primary-color);">' +
           '<p class="instruction-line">تدرس هذه الاستمارة آراء الطلبة حول قضايا الإعاقة الذهنية؛</p>' +
-                   '<p class="instruction-line">إجاباتكم شخصية، ليس فيها صحيح ولا خطأ،</p>' +
+          '<p class="instruction-line">إجاباتكم شخصية، ليس فيها صحيح ولا خطأ،</p>' +
           '<p class="instruction-line">إجاباتكم سرية، وستستعمل لأغراض البحث العلمي فقط.</p>' +
           '<p class="instruction-line">المشاركة طوعية، ويمكن الانسحاب في أي وقت.</p>' +
           '<p class="instruction-line">لن تستغرق الإجابة عن الاستمارة أكثر من 10 دقائق.</p>' +
@@ -576,7 +664,8 @@ var orderGroup = 1; // SD-First دائماً
       return true;
     }
   };
-pages.demographics = {
+
+  pages.demographics = {
     render: function () {
       return '' +
         '<h2>البيانات الشخصية</h2>' +
@@ -618,63 +707,57 @@ pages.demographics = {
       if (!checkRadio('gender', 'blk_gender')) valid = false;
       if (!checkRadio('age', 'blk_age')) valid = false;
       if (!checkRadio('edu', 'blk_edu')) valid = false;
+
       var maj = document.querySelector('input[name="major"]');
-      if (!maj || maj.value.replace(/^\s+|\s+$/g,'').length < 2) { 
-          if(maj) addClass(maj, 'input-error'); 
-          valid = false; 
-      } else removeClass(maj, 'input-error');
-      
+      if (!maj || maj.value.replace(/^\s+|\s+$/g,'').length < 2) {
+        if (maj) addClass(maj, 'input-error');
+        valid = false;
+      } else {
+        removeClass(maj, 'input-error');
+      }
+
       if (!valid) alert("يرجى إكمال البيانات المطلوبة.");
       return valid;
     }
-};
+  };
 
   pages.social_distance = {
     render: function () {
       var roles = [
-        "زوجاً/زوجة",
-        "صهرا (زوج/ة لأحد الأقارب)",
-        "جار(ة) في السكن",
-        "صديقاً (ة) مقربا (ة)",
-        "زميلاً (ة) في الدراسة",
-        "أفضل ألا تكون لي أي صلة به(ا)"
+        "أقبل أن يكون : زوجاً/زوجة",
+        "أقبل أن يكون :صهراً (زوج/ة لأحد الأقارب)",
+        "أقبل أن يكون :جار(ة) في السكن",
+        "أقبل أن يكون :صديقاً (ة) مقرباً (ة)",
+        "أقبل أن يكون :زميلاً (ة) في الدراسة",
+        "أقبل أن :تقتصر علاقتي به/بها على الحد الأدنى فقط"
       ];
-      var rows = '';
+
+      var items = '';
       for (var i = 0; i < roles.length; i++) {
         var idx = i + 1;
-        rows += '' +
-          '<tr id="row_sd_' + idx + '">' +
-            '<td>' + roles[i] + '</td>' +
-            '<td class="clickable-cell" onclick="selectTableCell(this)"><input type="radio" class="table-radio" name="mds_' + idx + '" value="5"></td>' +
-            '<td class="clickable-cell" onclick="selectTableCell(this)"><input type="radio" class="table-radio" name="mds_' + idx + '" value="4"></td>' +
-            '<td class="clickable-cell" onclick="selectTableCell(this)"><input type="radio" class="table-radio" name="mds_' + idx + '" value="3"></td>' +
-            '<td class="clickable-cell" onclick="selectTableCell(this)"><input type="radio" class="table-radio" name="mds_' + idx + '" value="2"></td>' +
-            '<td class="clickable-cell" onclick="selectTableCell(this)"><input type="radio" class="table-radio" name="mds_' + idx + '" value="1"></td>' +
-          '</tr>';
+        items += '' +
+          '<div class="sd-item" id="row_sd_' + idx + '">' +
+            '<div class="sd-role">' + roles[i] + '</div>' +
+            '<div class="sd-likert-row">' +
+              createSDLikert('mds_' + idx, '5', 'أوافق بشدة') +
+              createSDLikert('mds_' + idx, '4', 'أوافق') +
+              createSDLikert('mds_' + idx, '3', 'محايد') +
+              createSDLikert('mds_' + idx, '2', 'أعارض') +
+              createSDLikert('mds_' + idx, '1', 'أعارض بشدة') +
+            '</div>' +
+          '</div>';
       }
 
       return '' +
         '<div style="background:#fff5f5; padding:20px; border-radius:10px; margin-bottom:20px; border:1px dashed #e74c3c; line-height:1.9; font-size:1.1em;">' +
-          '<p style="margin:0; margin-bottom:10px;">فيما يلي مجموعة من العلاقات الاجتماعية، المرجو منك ' + selectedLabel.sd_intro + '</p>' +
-          '<p class="sd-question-line">إلى أي حدّ تقبل/تقبلين أن يكون هذا الشخص:</p>' +
+          '<p style="margin:0 0 10px 0;">فيما يلي مجموعة من العلاقات الاجتماعية.</p>' +
+          '<p style="margin:0 0 10px 0;">يرجى تحديد درجة موافقتك الشخصية على إمكانية إقامة كل من هذه العلاقات <span class="studied-term">' + selectedLabel.sd_intro + '</span>.</p>' +
+          '<p style="margin:0 0 8px 0;"><b>ملاحظة:</b> لا توجد إجابات صحيحة أو خاطئة.</p>' +
+          '<p style="margin:0;">عبِّر عن رأيك الشخصي في كل علاقة على حدة.</p>' +
         '</div>' +
         '<div id="sd_timer" class="timer-wait-msg">المرجو الانتظار... <span id="sd_count">5</span></div>' +
         '<div id="sd_content" class="hidden">' +
-          '<div class="table-scroll-wrapper">' +
-            '<table>' +
-              '<thead>' +
-                '<tr>' +
-                  '<th>العلاقة</th>' +
-                  '<th style="color:#27ae60">أوافق بشدة</th>' +
-                  '<th style="color:#2ecc71">أوافق</th>' +
-                  '<th style="color:#7f8c8d">محايد</th>' +
-                  '<th style="color:#e67e22">أعارض</th>' +
-                  '<th style="color:#c0392b">أعارض بشدة</th>' +
-                '</tr>' +
-              '</thead>' +
-              '<tbody>' + rows + '</tbody>' +
-            '</table>' +
-          '</div>' +
+          items +
         '</div>';
     },
     validate: function () {
@@ -686,84 +769,23 @@ pages.demographics = {
         var checked = document.querySelector('input[name="mds_' + i + '"]:checked');
         var row = document.getElementById('row_sd_' + i);
         if (!checked) {
-          if (row) row.style.background = "#fff0f0";
+          if (row) addClass(row, 'input-error');
           valid = false;
         } else {
-          if (row) row.style.background = "transparent";
+          if (row) removeClass(row, 'input-error');
         }
       }
-      if (!valid) alert("يرجى الإجابة على جميع الأسطر.");
+
+      if (!valid) alert("يرجى الإجابة على جميع البنود.");
       return valid;
     }
-  };
-
-  pages.buffer = {
-    render: function () {
-      return '' +
-        '<h2>فاصل تنشيطي</h2>' +
-        '<div class="question-block" id="blk_math">' +
-          '<p class="q-label">1. مسألة حسابية بسيطة: <b>15 + 7 = ؟</b></p>' +
-          '<div class="options-grid">' +
-            createRadioCard('buf_math', '20', '20') +
-            createRadioCard('buf_math', '22', '22') +
-            createRadioCard('buf_math', '25', '25') +
-          '</div>' +
-        '</div>' +
-        '<div class="question-block" id="blk_tech">' +
-          '<p class="q-label">2. ما هي أحدث تقنية للاتصال اليوم؟</p>' +
-          '<div class="options-grid">' +
-            createRadioCard('buf_tech', '3G', '3G') +
-            createRadioCard('buf_tech', '4G', '4G') +
-            createRadioCard('buf_tech', '5G', '5G') +
-          '</div>' +
-        '</div>';
-    },
-    validate: function () {
-      return checkRadio('buf_math', 'blk_math') && checkRadio('buf_tech', 'blk_tech');
-    }
-  };
-
-  pages.ref_intro = {
-    render: function () {
-      return '' +
-        '<h2>طريقة الإجابة</h2>' +
-        '<div style="background:#eef6fc; padding:20px; border-radius:10px; margin-bottom:20px; line-height:1.8;">' +
-          '<p>ستُعرض عليك مجموعة من القضايا الخلافية، ونريد رأيك الشخصي  فيها:</p>' +
-          '<ul style="list-style-type: none; padding: 0; margin-top: 10px;">' +
-            '<li style="margin-bottom: 10px;">- ستجد أمامك رأيين متعارضين، أحدهما باللون <span style="color:#c0392b; font-weight:bold;">الأحمر</span> والآخر باللون <span style="color:#2980b9; font-weight:bold;"> الأزرق </span> اختر (اختاري) الرأي الأقرب إلى قناعاتك الشخصية .</li>' +
-            '<li>- إذا بدا لك أن الرأيين <b>متساويان</b>، يمكنك اختيار <b>"محايد"</b> (أي أنك تميل (ين) إليهما بالقدر نفسه).</li>' +
-          '</ul>' +
-          '<hr style="border:0; border-top:1px solid #dcdcdc; margin:20px 0;">' +
-          '<p>ولتوضيح الطريقة، جرّب المثال الآتي:</p>' +
-        '</div>' +
-        '<div id="intro_timer" class="timer-wait-msg">سيظهر المثال بعد <span id="intro_count">5</span> ثوان...</div>' +
-        '<div id="ex_container" class="hidden" style="border:2px dashed #ccc; padding:20px; border-radius:15px; background:white;">' +
-          '<div class="ref-header" style="color:#2c3e50;">المشروب المفضل</div>' +
-          '<div class="ref-intro-q">عادة، يشرب المغاربة الشاي والقهوة معا، لكن بالنسبة لك شخصيا، أيهما أفضل؟</div>' +
-          '<div class="ref-split-container">' +
-            '<div class="choice-card right-card" onclick="handleRefClick(\'right\', \'ex\')">الشاي .</div>' +
-            '<div class="neutral-wrapper"><div class="neutral-btn" onclick="handleRefClick(\'neutral\', \'ex\')">محايد</div></div>' +
-            '<div class="choice-card left-card" onclick="handleRefClick(\'left\', \'ex\')">القهوة .</div>' +
-          '</div>' +
-          '<div id="ex_intensity" class="intensity-section hidden">' +
-            '<p style="margin-bottom:10px; font-weight:bold;">ما درجة موافقتك على هذا الخيار (كلما كبر الرقم زادت شدة الموافقة)؟</p>' +
-            '<div class="intensity-buttons">' +
-              '<div class="int-btn" onclick="handleIntClick(3, \'ex\', this)">3 <span class="lbl">موافقة تامة</span></div>' +
-              '<div class="int-btn" onclick="handleIntClick(2, \'ex\', this)">2 <span class="lbl">موافقة متوسطة</span></div>' +
-              '<div class="int-btn" onclick="handleIntClick(1, \'ex\', this)">1 <span class="lbl">موافقة جزئية</span></div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="ref-feedback" id="ex_feedback"></div>' +
-        '</div>';
-    },
-    validate: function () { return true; }
   };
 
   pages.ref_questions = {
     render: function () {
       return '' +
         '<div id="ref_q_container"></div>' +
-        '<button id="ref_next_btn" class="btn hidden" onclick="nextRefQuestion()">التالي</button>';
+        '<button id="ref_next_btn" class="btn" onclick="nextRefQuestion()">التالي</button>';
     },
     validate: function () { return false; }
   };
@@ -773,6 +795,7 @@ pages.demographics = {
       var freq = ['نادرًا جدًا','نادرًا','أحيانًا','كثيرا','كثيرا جداً'];
       var clear = ['غامض جداً','غامض','واضح نوعاً ما','واضح','واضح جداً'];
       var i, cards1 = '', cards2 = '';
+
       for (i = 0; i < freq.length; i++) cards1 += createRadioCard('fam_freq', String(i+1), freq[i]);
       for (i = 0; i < clear.length; i++) cards2 += createRadioCard('fam_clear', String(i+1), clear[i]);
 
@@ -788,12 +811,15 @@ pages.demographics = {
         '</div>';
     },
     validate: function () {
-      if (!checkRadio('fam_freq','blk_fam1') || !checkRadio('fam_clear','blk_fam2')) { alert('يرجى الإجابة'); return false; }
+      if (!checkRadio('fam_freq','blk_fam1') || !checkRadio('fam_clear','blk_fam2')) {
+        alert('يرجى الإجابة');
+        return false;
+      }
       return true;
     }
   };
 
- pages.final_demo = {
+  pages.final_demo = {
     render: function () {
       var know = ['لا أملك تقريباً أي معرفة','معرفة بسيطة','معرفة متوسطة','معرفة جيدة','معرفة ممتازة'];
       var i, cards = '';
@@ -802,16 +828,15 @@ pages.demographics = {
       return '' +
         '<h2>أسئلة ختامية</h2>' +
         '<div class="question-block" id="blk_know">' +
-          '<p class="q-label">1. كيف تصف مستوى معرفتك الحالية بموضوع الإعاقة الذهنية؟</p>' +
+          '<p class="q-label">1. كيف تقيّم مستوى معرفتك العام بقضايا الإعاقة الذهنية؟</p>' +
           '<div class="options-grid" style="grid-template-columns: 1fr;">' + cards + '</div>' +
         '</div>' +
-        
-        // تم استبدال سؤال (نعم/لا) المكرر بالسؤال التفصيلي المنقول من البداية بنفس ألفاظه الأصلية
+
         '<div class="question-block" id="blk_contact">' +
-          '<p class="q-label">2. هل تربطك علاقة شخصية بشخص ذي إعاقة ذهنية؟</p>' +
+          '<p class="q-label">2. هل سبق لك أن كانت لك علاقة مباشرة بشخص لديه إعاقة ذهنية؟</p>' +
           '<div class="options-grid" style="grid-template-columns: 1fr;">' +
-            createRadioCard('contact', 'لا، لا أعرف أحداً بشكل شخصي.', 'لا، لا أعرف أحداً بشكل شخصي.') +
-            createRadioCard('contact', 'نعم، علاقة بعيدة (جار، زميل، أحد المعارف...).', 'نعم، علاقة بعيدة (جار، زميل، أحد المعارف...).') +
+            createRadioCard('contact', 'لا', 'لا') +
+            createRadioCard('contact', 'نعم، علاقة سطحية (في الحي، في الدراسة، في العمل...).', 'نعم، علاقة سطحية (في الحي، في الدراسة، في العمل...).') +
             createRadioCard('contact', 'نعم، علاقة مقربة (صديق، قريب من العائلة...).', 'نعم، علاقة مقربة (صديق، قريب من العائلة...).') +
             createRadioCard('contact', 'نعم، علاقة قرابة من الدرجة الأولى (أخ، ابن، والد...).', 'نعم، علاقة قرابة من الدرجة الأولى (أخ، ابن، والد...).') +
           '</div>' +
@@ -827,7 +852,8 @@ pages.demographics = {
     },
     validate: function () {
       if (!checkRadio('know','blk_know') || !checkRadio('contact','blk_contact') || !checkRadio('att_chk','blk_att')) {
-        alert("يرجى الإجابة على الكل."); return false;
+        alert("يرجى الإجابة على الكل.");
+        return false;
       }
       return true;
     }
@@ -846,9 +872,6 @@ pages.demographics = {
   };
 
   function renderRefQuestionDynamic() {
-    var refNextBtn = document.getElementById('ref_next_btn');
-    if (refNextBtn) addClass(refNextBtn, 'hidden');
-
     if (refQIndex >= randomizedRefQuestions.length) {
       currentPageIndex++;
       renderPage();
@@ -856,145 +879,73 @@ pages.demographics = {
     }
 
     var q = randomizedRefQuestions[refQIndex];
-    currentRefState = { side: null, intensity: null };
     responses.timings['ref_start_' + q.id] = now();
 
     var html = '' +
-      '<div style="animation:fadeIn 0.5s;">' +
-        '<div class="ref-header">' + selectedLabel.text + '</div>' +
-        '<div class="ref-intro-q">' + q.intro + '</div>' +
-        '<div class="ref-split-container">' +
-          '<div class="choice-card right-card" id="card_right_' + q.id + '" onclick="handleRefClick(\'right\', ' + q.id + ')">' + q.right + '</div>' +
-          '<div class="neutral-wrapper"><div class="neutral-btn" id="btn_neutral_' + q.id + '" onclick="handleRefClick(\'neutral\', ' + q.id + ')">محايد</div></div>' +
-          '<div class="choice-card left-card" id="card_left_' + q.id + '" onclick="handleRefClick(\'left\', ' + q.id + ')">' + q.left + '</div>' +
-        '</div>' +
-        '<div id="neutral_explain_' + q.id + '" class="neutral-explain hidden">لقد اخترت الطرفين معًا بالتساوي.</div>' +
-        '<div id="intensity_' + q.id + '" class="intensity-section hidden">' +
-          '<p style="margin-bottom:10px; font-weight:bold;">ما درجة موافقتك على هذا الخيار (كلما كبر الرقم زادت شدة الموافقة)؟</p>' +
-          '<div class="intensity-buttons">' +
-            '<div class="int-btn" onclick="handleIntClick(3, ' + q.id + ', this)">3 <span class="lbl">موافقة تامة</span></div>' +
-            '<div class="int-btn" onclick="handleIntClick(2, ' + q.id + ', this)">2 <span class="lbl">موافقة متوسطة</span></div>' +
-            '<div class="int-btn" onclick="handleIntClick(1, ' + q.id + ', this)">1 <span class="lbl">موافقة جزئية</span></div>' +
-          '</div>' +
+      '<div class="ref-short-wrap">' +
+        '<div class="ref-term-header">' + selectedLabel.text + '</div>' +
+        '<div class="ref-short-q" id="ref_blk_' + q.id + '">' +
+          '<div class="main-q">' + q.main + '</div>' +
+          '<div class="sub-q">' + q.sub + '</div>' +
+          '<input type="text" class="ref-short-input" id="ref_input_' + q.id + '" name="ref_' + q.id + '" maxlength="60" placeholder="اكتب جواباً مختصراً جداً..." autocomplete="off">' +
+          '<span class="char-note">الحد الأقصى: 60 حرفاً</span>' +
         '</div>' +
       '</div>';
 
     var c = document.getElementById('ref_q_container');
     if (c) c.innerHTML = html;
+
+    setTimeout(function () {
+      var inp = document.getElementById('ref_input_' + q.id);
+      if (inp) {
+        inp.focus();
+        inp.oninput = function () {
+          removeClass(inp, 'input-error');
+          var blk = document.getElementById('ref_blk_' + q.id);
+          if (blk) removeClass(blk, 'input-error');
+        };
+      }
+    }, 50);
   }
 
-  window.handleRefClick = function (side, id) {
-    currentRefState.side = side;
+  function saveCurrentRefTextAnswer() {
+    if (refQIndex >= randomizedRefQuestions.length) return false;
 
-    if (id !== 'ex') {
-      removeClass(document.getElementById('card_right_' + id), 'selected');
-      removeClass(document.getElementById('card_right_' + id), 'dimmed');
-      removeClass(document.getElementById('card_left_' + id), 'selected');
-      removeClass(document.getElementById('card_left_' + id), 'dimmed');
-      removeClass(document.getElementById('btn_neutral_' + id), 'selected');
-      var explain = document.getElementById('neutral_explain_' + id);
-      if (explain) addClass(explain, 'hidden');
-    } else {
-      var r = document.querySelector('.right-card');
-      var l = document.querySelector('.left-card');
-      var n = document.querySelector('.neutral-btn');
-      removeClass(r, 'selected'); removeClass(r, 'dimmed');
-      removeClass(l, 'selected'); removeClass(l, 'dimmed');
-      removeClass(n, 'selected');
+    var q = randomizedRefQuestions[refQIndex];
+    var inp = document.getElementById('ref_input_' + q.id);
+    var blk = document.getElementById('ref_blk_' + q.id);
+    var val = inp ? inp.value.replace(/^\s+|\s+$/g, '') : '';
+
+    if (!val) {
+      if (inp) addClass(inp, 'input-error');
+      if (blk) addClass(blk, 'input-error');
+      if (inp) safeScrollIntoView(inp);
+      alert('يرجى إدخال إجابة مختصرة قبل المتابعة.');
+      return false;
     }
 
-    if (side === 'neutral') {
-      currentRefState.intensity = null;
-
-      if (id !== 'ex') {
-        addClass(document.getElementById('btn_neutral_' + id), 'selected');
-        addClass(document.getElementById('card_right_' + id), 'dimmed');
-        addClass(document.getElementById('card_left_' + id), 'dimmed');
-        addClass(document.getElementById('intensity_' + id), 'hidden');
-        saveRefAnswer(id, 0);
-        var ex = document.getElementById('neutral_explain_' + id);
-        if (ex) removeClass(ex, 'hidden');
-
-        var nextBtn = document.getElementById('ref_next_btn');
-        if (nextBtn) { removeClass(nextBtn, 'hidden'); safeScrollIntoView(nextBtn); }
-      } else {
-        addClass(document.querySelector('.neutral-btn'), 'selected');
-        addClass(document.querySelector('.right-card'), 'dimmed');
-        addClass(document.querySelector('.left-card'), 'dimmed');
-        addClass(document.getElementById('ex_intensity'), 'hidden');
-        var fb = document.getElementById('ex_feedback');
-        if (fb) { fb.innerText = "اخترت الحياد، أي أنك تميل (ين) إلي الأسلوبين بالقدر نفسه"; fb.style.display = 'block'; }
-        var nb = document.getElementById('ref_next_btn');
-        if (nb) { removeClass(nb, 'hidden'); safeScrollIntoView(nb); }
-      }
-    } else {
-      currentRefState.intensity = null;
-
-      var card = (id !== 'ex')
-        ? document.getElementById('card_' + side + '_' + id)
-        : (side === 'right' ? document.querySelector('.right-card') : document.querySelector('.left-card'));
-
-      var otherCard = (id !== 'ex')
-        ? document.getElementById('card_' + (side === 'right' ? 'left' : 'right') + '_' + id)
-        : (side === 'right' ? document.querySelector('.left-card') : document.querySelector('.right-card'));
-
-      addClass(card, 'selected');
-      addClass(otherCard, 'dimmed');
-
-      var intSec = (id !== 'ex') ? document.getElementById('intensity_' + id) : document.getElementById('ex_intensity');
-      removeClass(intSec, 'hidden');
-
-      var nextBtn2 = document.getElementById('ref_next_btn');
-      if (nextBtn2) addClass(nextBtn2, 'hidden');
-
-      safeScrollIntoView(intSec);
-
-      var btns = intSec ? intSec.querySelectorAll('.int-btn') : [];
-      for (var i = 0; i < btns.length; i++) removeClass(btns[i], 'active');
+    if (val.length > 60) {
+      if (inp) addClass(inp, 'input-error');
+      if (blk) addClass(blk, 'input-error');
+      alert('الحد الأقصى للإجابة هو 60 حرفاً.');
+      return false;
     }
-  };
 
-  window.handleIntClick = function (val, id, btn) {
-    currentRefState.intensity = val;
-
-    var all = btn.parentElement ? btn.parentElement.querySelectorAll('.int-btn') : [];
-    for (var i = 0; i < all.length; i++) removeClass(all[i], 'active');
-    addClass(btn, 'active');
-
-    if (id === 'ex') {
-      var fb = document.getElementById('ex_feedback');
-      if (fb) { fb.innerText = "ممتاز! لقد حددت درجة موافقتك."; fb.style.display = 'block'; }
-      var nb = document.getElementById('ref_next_btn');
-      if (nb) { removeClass(nb, 'hidden'); safeScrollIntoView(nb); }
-    } else {
-      var finalVal = (currentRefState.side === 'right') ? val : -val;
-      var ex = document.getElementById('neutral_explain_' + id);
-      if (ex) addClass(ex, 'hidden');
-      saveRefAnswer(id, finalVal);
-
-      var nextBtn = document.getElementById('ref_next_btn');
-      if (nextBtn) { removeClass(nextBtn, 'hidden'); safeScrollIntoView(nextBtn); }
-    }
-  };
-
-  function saveRefAnswer(qId, val) {
-    var startKey = 'ref_start_' + qId;
+    var startKey = 'ref_start_' + q.id;
     var t0 = responses.timings[startKey];
-    var t = (typeof t0 === 'number') ? (now() - t0) : null;
-    responses.data['ref_' + qId] = val;
-    responses.data['time_ref_' + qId] = t;
+    var t = (typeof t0 === 'number') ? (now() - t0) : '';
+
+    responses.data['ref_' + q.id] = val;
+    responses.data['time_ref_' + q.id] = t;
+
+    return true;
   }
 
   window.nextRefQuestion = function () {
     var currentPageName = pageSequence[currentPageIndex];
+
     if (currentPageName === 'ref_questions') {
-      if (!currentRefState || !currentRefState.side) return;
-      if (currentRefState.side !== 'neutral' && !currentRefState.intensity) return;
-    }
-    if (currentPageName === 'ref_intro') {
-      currentPageIndex++;
-      renderPage();
-    } else {
+      if (!saveCurrentRefTextAnswer()) return;
       refQIndex++;
       renderRefQuestionDynamic();
     }
@@ -1002,6 +953,11 @@ pages.demographics = {
 
   function submitSurvey() {
     saveData();
+
+    if (typeof responses.data.ref_4 === 'undefined') responses.data.ref_4 = '';
+    if (typeof responses.data.ref_5 === 'undefined') responses.data.ref_5 = '';
+    if (typeof responses.data.time_ref_4 === 'undefined') responses.data.time_ref_4 = '';
+    if (typeof responses.data.time_ref_5 === 'undefined') responses.data.time_ref_5 = '';
 
     var qScore = 100;
     if (responses.data.att_chk !== "99") qScore -= 50;
@@ -1013,16 +969,15 @@ pages.demographics = {
     }
     if (sdVals.length === 6) {
       var same = true;
-      for (var j = 1; j < sdVals.length; j++) if (sdVals[j] !== sdVals[0]) { same = false; break; }
+      for (var j = 1; j < sdVals.length; j++) {
+        if (sdVals[j] !== sdVals[0]) { same = false; break; }
+      }
       if (same) qScore -= 20;
     }
 
     responses.qualityScore = qScore;
     responses.duration = (now() - responses.startTime) / 1000;
 
-    var payload = 'payload=' + encodeURIComponent(JSON.stringify(responses));
-
-    // أفضل خيار (لا يحتاج CORS): إرسال عبر form إلى iframe مخفي.
     var iframe = document.createElement('iframe');
     iframe.name = 'hidden_iframe_submit';
     iframe.style.display = 'none';
@@ -1043,7 +998,6 @@ pages.demographics = {
 
     try { form.submit(); } catch (e) {}
 
-    // عرض الشكر دون انتظار استجابة (Google Apps Script غالبًا يعيد redirect/صفحة).
     setTimeout(function () {
       var container = document.getElementById('main-container');
       if (container) container.innerHTML = pages.end.render();
@@ -1062,8 +1016,10 @@ pages.demographics = {
           '<h3>جار إرسال إجاباتك...</h3>' +
           '<p>المرجو الانتظار قليلاً وعدم إغلاق الصفحة.</p>' +
         '</div>';
+
       var pb = document.getElementById('progress-bar');
       if (pb) pb.style.width = '100%';
+
       submitSurvey();
       return;
     }
@@ -1088,30 +1044,11 @@ pages.demographics = {
           removeClass(document.getElementById('sd_content'), 'hidden');
         }
       }, 1000);
-    } else if (pageKey === 'ref_intro') {
-      var count2 = 5;
-      var timerEl2 = document.getElementById('intro_count');
-      var int2 = setInterval(function () {
-        count2--;
-        if (timerEl2) timerEl2.innerText = String(count2);
-        if (count2 <= 0) {
-          clearInterval(int2);
-          addClass(document.getElementById('intro_timer'), 'hidden');
-          removeClass(document.getElementById('ex_container'), 'hidden');
-        }
-      }, 1000);
-
-      var b = document.createElement('button');
-      b.id = 'ref_next_btn';
-      b.className = 'btn hidden';
-      b.innerText = 'ابدأ الأسئلة';
-      b.onclick = window.nextRefQuestion;
-      container.appendChild(b);
     } else if (pageKey === 'ref_questions') {
       renderRefQuestionDynamic();
     }
 
-    if (pageKey !== 'end' && pageKey !== 'ref_questions' && pageKey !== 'ref_intro') {
+    if (pageKey !== 'end' && pageKey !== 'ref_questions') {
       var btn = document.createElement('button');
       btn.className = 'btn';
       btn.innerText = 'التالي';
@@ -1126,7 +1063,6 @@ pages.demographics = {
     }
   }
 
-  // Global timer
   setInterval(function () {
     var diff = Math.floor((now() - responses.startTime) / 1000);
     var m = Math.floor(diff / 60);
@@ -1140,7 +1076,6 @@ pages.demographics = {
   renderPage();
 })();
 </script>
-
 
 </body>
 </html>
