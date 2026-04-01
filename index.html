@@ -443,7 +443,9 @@
 (function () {
   'use strict';
 
-  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzaQ8fzM8jdZ0QbSyo_1HoRw5MLs5zg7q_0epukhYz-wr8MHCJN6wb1_uyokgqQl45YnA/exec';
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9OZfMppl6VI7N3d_0P9h2BtjgBTa_-1FvhHD2EoSjsw_jjtqR-cYGQpwDLYPwHK00Kw/exec';
+  var SURVEY_RESPONDENT_KEY = 'survey_respondent_id_v1';
+  var SURVEY_ASSIGNMENT_KEY = 'survey_assignment_v1';
 
   function now() { return new Date().getTime(); }
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
@@ -495,6 +497,155 @@
     return arr;
   }
 
+  function setLoadingMessage_(msg) {
+    var container = document.getElementById('main-container');
+    if (!container) return;
+    container.innerHTML = '<div class="timer-wait-msg">' + msg + '</div>';
+  }
+
+  function generateRespondentId_() {
+    var bytes, out = '', i;
+    if (window.crypto && window.crypto.getRandomValues) {
+      bytes = new Uint8Array(12);
+      window.crypto.getRandomValues(bytes);
+      for (i = 0; i < bytes.length; i++) {
+        out += ('0' + bytes[i].toString(16)).slice(-2);
+      }
+    } else {
+      out = String(Math.floor(Math.random() * 1000000000000)) + String(now());
+    }
+    return 'r_' + now().toString(36) + '_' + out;
+  }
+
+  function getStoredRespondentId_() {
+    try { return localStorage.getItem(SURVEY_RESPONDENT_KEY) || ''; }
+    catch (e) { return ''; }
+  }
+
+  function saveRespondentId_(respondentId) {
+    try { localStorage.setItem(SURVEY_RESPONDENT_KEY, respondentId); } catch (e) {}
+  }
+
+  function getOrCreateRespondentId_() {
+    var existing = getStoredRespondentId_();
+    if (existing) return existing;
+    var newId = generateRespondentId_();
+    saveRespondentId_(newId);
+    return newId;
+  }
+
+  function readCachedAssignment_() {
+    try {
+      var raw = localStorage.getItem(SURVEY_ASSIGNMENT_KEY);
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      if (!parsed || !parsed.respondent_id || !parsed.label_id) return null;
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeCachedAssignment_(assignment) {
+    try {
+      localStorage.setItem(SURVEY_ASSIGNMENT_KEY, JSON.stringify(assignment));
+      if (assignment && assignment.respondent_id) {
+        localStorage.setItem(SURVEY_RESPONDENT_KEY, assignment.respondent_id);
+      }
+    } catch (e) {}
+  }
+
+  function findLabelById_(labelId) {
+    var n = Number(labelId);
+    for (var i = 0; i < labelOptions.length; i++) {
+      if (labelOptions[i].id === n) return labelOptions[i];
+    }
+    return null;
+  }
+
+  function applyAssignment_(assignment) {
+    var label = findLabelById_(assignment.label_id);
+    if (!label) throw new Error('invalid_label_assignment');
+
+    selectedLabel = label;
+    responses.labelId = label.id;
+    responses.respondentId = assignment.respondent_id || '';
+    responses.blockId = assignment.block_id || '';
+    responses.blockSize = assignment.block_size || '';
+    responses.blockPosition = assignment.block_position || '';
+    responses.assignmentTimestampIso = assignment.assigned_at_iso || '';
+
+    saveRespondentId_(responses.respondentId);
+  }
+
+  function requestAssignmentFromServer_(respondentId, done) {
+    var callbackName = '__surveyAssignCb_' + String(now()) + '_' + String(Math.floor(Math.random() * 1000000));
+    var script = document.createElement('script');
+    var finished = false;
+    var timeoutId = null;
+
+    function cleanup() {
+      if (finished) return;
+      finished = true;
+      if (timeoutId) clearTimeout(timeoutId);
+      try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[callbackName] = function (res) {
+      cleanup();
+      done(null, res);
+    };
+
+    script.async = true;
+    script.onerror = function () {
+      cleanup();
+      done(new Error('assign_load_failed'));
+    };
+
+    timeoutId = setTimeout(function () {
+      cleanup();
+      done(new Error('assign_timeout'));
+    }, 15000);
+
+    script.src =
+      SCRIPT_URL +
+      '?action=assign' +
+      '&respondent_id=' + encodeURIComponent(respondentId) +
+      '&callback=' + encodeURIComponent(callbackName) +
+      '&_ts=' + encodeURIComponent(String(now()));
+
+    document.body.appendChild(script);
+  }
+
+  function bootstrapSurvey_() {
+    setLoadingMessage_('جار تهيئة الاستمارة...');
+
+    var cached = readCachedAssignment_();
+    if (cached && findLabelById_(cached.label_id)) {
+      try {
+        applyAssignment_(cached);
+        determinePageOrder();
+        renderPage();
+        return;
+      } catch (e) {}
+    }
+
+    var respondentId = getOrCreateRespondentId_();
+
+    requestAssignmentFromServer_(respondentId, function (err, res) {
+      if (err || !res || res.ok !== true) {
+        setLoadingMessage_('تعذر تهيئة الاستمارة حالياً. المرجو إعادة تحميل الصفحة. إذا استمرت المشكلة، تواصل مع الباحث.');
+        return;
+      }
+
+      writeCachedAssignment_(res);
+      applyAssignment_(res);
+      determinePageOrder();
+      renderPage();
+    });
+  }
+
   var labelOptions = [
     {
       id: 1,
@@ -526,7 +677,7 @@
     }
   ];
 
-  var selectedLabel = labelOptions[Math.floor(Math.random() * labelOptions.length)];
+  var selectedLabel = null;
   var orderGroup = 1;
 
   var refShortQuestions = [
@@ -550,7 +701,12 @@
   var randomizedRefQuestions = fisherYatesShuffle(refShortQuestions.slice());
 
   var responses = {
-    labelId: selectedLabel.id,
+    respondentId: '',
+    labelId: '',
+    blockId: '',
+    blockSize: '',
+    blockPosition: '',
+    assignmentTimestampIso: '',
     orderGroup: (orderGroup === 0 ? "Ref-First" : "SD-First"),
     startTime: now(),
     data: {
@@ -1128,8 +1284,7 @@
     if (gt) gt.innerText = t;
   }, 1000);
 
-  determinePageOrder();
-  renderPage();
+  bootstrapSurvey_();
 })();
 </script>
 
