@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>استمارة البحث</title>
+    <title>آراء الطلبة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -519,12 +519,12 @@
   }
 
   function getStoredRespondentId_() {
-    try { return localStorage.getItem(SURVEY_RESPONDENT_KEY) || ''; }
+    try { return sessionStorage.getItem(SURVEY_RESPONDENT_KEY) || ''; }
     catch (e) { return ''; }
   }
 
   function saveRespondentId_(respondentId) {
-    try { localStorage.setItem(SURVEY_RESPONDENT_KEY, respondentId); } catch (e) {}
+    try { sessionStorage.setItem(SURVEY_RESPONDENT_KEY, respondentId); } catch (e) {}
   }
 
   function getOrCreateRespondentId_() {
@@ -537,7 +537,7 @@
 
   function readCachedAssignment_() {
     try {
-      var raw = localStorage.getItem(SURVEY_ASSIGNMENT_KEY);
+      var raw = sessionStorage.getItem(SURVEY_ASSIGNMENT_KEY);
       if (!raw) return null;
       var parsed = JSON.parse(raw);
       if (!parsed || !parsed.respondent_id || !parsed.label_id) return null;
@@ -549,9 +549,9 @@
 
   function writeCachedAssignment_(assignment) {
     try {
-      localStorage.setItem(SURVEY_ASSIGNMENT_KEY, JSON.stringify(assignment));
+      sessionStorage.setItem(SURVEY_ASSIGNMENT_KEY, JSON.stringify(assignment));
       if (assignment && assignment.respondent_id) {
-        localStorage.setItem(SURVEY_RESPONDENT_KEY, assignment.respondent_id);
+        sessionStorage.setItem(SURVEY_RESPONDENT_KEY, assignment.respondent_id);
       }
     } catch (e) {}
   }
